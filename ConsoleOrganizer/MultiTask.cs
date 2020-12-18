@@ -17,11 +17,15 @@ namespace ConsoleOrganizer
         private static string database = "organizerdata";
         private static string pass = "1234";
 
-        public List<SingleTask> tasks;
+        public List<SingleTask> tasks;  
         public int Count { get; set; }
 
-        private void TasksFromDB(string sql)
+        private void GetTasks(string sql)
         {
+            sql = $"SELECT tasks.id, tasks.name, startDateTime, stopDateTime, statuses.name, criticality.value, categories.name, smallDescription, largeDescription FROM {database}.tasks " +
+                "INNER JOIN criticality ON tasks.criticality_id = criticality.id " +
+                "INNER JOIN categories ON tasks.category_id = categories.id " +
+                "INNER JOIN statuses ON tasks.status_id = statuses.id " + sql;
             tasks = new List<SingleTask>();
             Count = 0;
             MySqlConnection connection = new MySqlConnection($"server = {server}; user = {user}; database = {database}; password = {pass}");
@@ -39,19 +43,12 @@ namespace ConsoleOrganizer
 
         public void GetAllTasks()           //Получение всех заданий
         {
-            TasksFromDB($"SELECT tasks.id, tasks.name, startDateTime, stopDateTime, statuses.name, criticality.value, categories.name, smallDescription, largeDescription FROM {database}.tasks " +
-                "INNER JOIN criticality ON tasks.criticality_id = criticality.id " +
-                "INNER JOIN categories ON tasks.category_id = categories.id " +
-                "INNER JOIN statuses ON tasks.status_id = statuses.id");
+            GetTasks(" ");
         }
 
-        public void GetTaskByID(int id)
+        public void GetTaskByID(int id)     //Получение заданий по ID
         {
-            TasksFromDB($"SELECT tasks.id, tasks.name, startDateTime, stopDateTime, statuses.name, criticality.value, categories.name, smallDescription, largeDescription FROM {database}.tasks " +
-                "INNER JOIN criticality ON tasks.criticality_id = criticality.id " +
-                "INNER JOIN categories ON tasks.category_id = categories.id " +
-                "INNER JOIN statuses ON tasks.status_id = statuses.id " +
-                $"WHERE tasks.id = {id}");
+            GetTasks($"WHERE tasks.id = {id}");
         }
 
         public void ShowMultiTask()

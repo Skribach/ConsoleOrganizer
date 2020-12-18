@@ -23,7 +23,7 @@ namespace ConsoleOrganizer
 
             MultiTask my = new MultiTask();
             my.GetAllTasks();
-            my.GetTaskByID(1);
+            //my.GetTaskByID(2);
             my.ShowMultiTask();
 
             Console.ReadKey();
