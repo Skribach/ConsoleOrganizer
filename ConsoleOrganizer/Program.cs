@@ -22,7 +22,7 @@ namespace ConsoleOrganizer
             b.ShowRow();*/
 
             MultiTask my = new MultiTask();
-            my.GetAllTasks();
+            my.GetTasks(MultiTask.FormMySqlQuery(Fields.none, Fields.start, "", true));
             //my.GetTaskByID(2);
             my.ShowMultiTask();
 
