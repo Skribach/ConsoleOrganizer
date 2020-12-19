@@ -10,9 +10,13 @@ using MySql.Data.MySqlClient;
 
 namespace ConsoleOrganizer
 {    
-    public enum Fields
+    public enum SearchFields
     {
-        none, id, name, start, stop, status, criticality, category
+        id, name, start, stop, status, criticality, category
+    }
+    public enum SortFields
+    {
+        id, name, start, stop, status, criticality, category
     }
 
     public class MultiTask
@@ -42,70 +46,108 @@ namespace ConsoleOrganizer
             connection.Close();
         }
 
-        public static string FormMySqlQuery(Fields searchBy, Fields sortBy, string searchVal, bool isDecsOrder)
+        public static string FormMySqlQuery()
         {
-            string res = $"SELECT tasks.id, tasks.name, startDateTime, stopDateTime, statuses.name, criticality.name, categories.name, smallDescription, largeDescription " +
+            return "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticality.name, categories.name, smallDescription, largeDescription " +
                 $"FROM {database}.tasks " +
                 "INNER JOIN criticality ON tasks.criticality_id = criticality.id " +
                 "INNER JOIN categories ON tasks.category_id = categories.id " +
                 "INNER JOIN statuses ON tasks.status_id = statuses.id ";
+        }
+
+        public static string FormMySqlQuery(SearchFields searchBy, string searchVal)
+        {
+            string res = FormMySqlQuery() + "WHERE ";
             switch (searchBy)
-            {
-                case Fields.none:
+            {               
+                case SearchFields.id:
+                    res += $"tasks.id = {searchVal} ";
                     break;
-                case Fields.id:
-                    res += $"WHERE tasks.id = {searchVal} ";
+                case SearchFields.name:
+                    res += $"tasks.name = '{searchVal}' ";
                     break;
-                case Fields.name:
-                    res += $"WHERE tasks.name = '{searchVal}' ";
+                case SearchFields.start:
+                    res += $"tasks.start = '{searchVal}' ";
                     break;
-                case Fields.start:
-                    res += $"WHERE tasks.start = '{searchVal}' ";
+                case SearchFields.stop:
+                    res += $"tasks.stop = '{searchVal}' ";
                     break;
-                case Fields.stop:
-                    res += $"WHERE tasks.stop = '{searchVal}' ";
+                case SearchFields.status:
+                    res += $"statuses.name = '{searchVal}' ";
                     break;
-                case Fields.status:
-                    res += $"WHERE statuses.name = '{searchVal}' ";
+                case SearchFields.criticality:
+                    res += $"criticality.name = '{searchVal}' ";
                     break;
-                case Fields.criticality:
-                    res += $"WHERE criticality.name = '{searchVal}' ";
-                    break;
-                case Fields.category:
-                    res += $"WHERE categories.name = '{searchVal}' ";
+                case SearchFields.category:
+                    res += $"categories.name = '{searchVal}' ";
                     break;
             }
+            return res;
+        }
+
+        public static string FormMySqlQuery(SortFields sortBy, bool isAscOrder)
+        {
+            string res = FormMySqlQuery() + "ORDER BY ";
+            switch (sortBy)
+            {   
+                case SortFields.id:
+                    res += $"tasks.id ";
+                    break;
+                case SortFields.name:
+                    res += $"tasks.name ";
+                    break;
+                case SortFields.start:
+                    res += $"tasks.start ";
+                    break;
+                case SortFields.stop:
+                    res += $"tasks.stop ";
+                    break;
+                case SortFields.status:
+                    res += $"statuses.name ";
+                    break;
+                case SortFields.criticality:
+                    res += $"criticality.name ";
+                    break;
+                case SortFields.category:
+                    res += $"categories.name ";
+                    break;
+            }
+            if (!isAscOrder)
+                res += "DESC ";
+            return res;
+        }
+
+        public static string FormMySqlQuery(SearchFields searchBy, string searchVal, SortFields sortBy, bool isDecsOrder)
+        {
+            string res = FormMySqlQuery(searchBy, searchVal) + "ORDER BY ";
             switch (sortBy)
             {
-                case Fields.none:
+                case SortFields.id:
+                    res += $"tasks.id ";
                     break;
-                case Fields.id:
-                    res += $"ORDER BY tasks.id ";
+                case SortFields.name:
+                    res += $"tasks.name ";
                     break;
-                case Fields.name:
-                    res += $"ORDER BY tasks.name ";
+                case SortFields.start:
+                    res += $"tasks.startDateTime ";
                     break;
-                case Fields.start:
-                    res += $"ORDER BY tasks.startDateTime ";
+                case SortFields.stop:
+                    res += $"tasks.stopDateTime ";
                     break;
-                case Fields.stop:
-                    res += $"ORDER BY tasks.stopDateTime ";
+                case SortFields.status:
+                    res += $"statuses.name ";
                     break;
-                case Fields.status:
-                    res += $"ORDER BY statuses.name ";
+                case SortFields.criticality:
+                    res += $"criticality.name ";
                     break;
-                case Fields.criticality:
-                    res += $"ORDER BY criticality.name ";
-                    break;
-                case Fields.category:
-                    res += $"ORDER BY categories.name ";
+                case SortFields.category:
+                    res += $"categories.name ";
                     break;
             }
-            if (sortBy != Fields.none)
-                if (isDecsOrder)
-                    res += "DESC ";
+            if (isDecsOrder)
+                res += "DESC ";
             return res;
-        }    
+        } 
 
         public void ShowMultiTask()
         {
