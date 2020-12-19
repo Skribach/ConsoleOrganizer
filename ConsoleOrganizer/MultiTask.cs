@@ -161,9 +161,17 @@ namespace ConsoleOrganizer
         }
         public void Create(SingleTask st)
         {
-            MySqlQuery1("INSERT INTO `organizerdata`.`tasks` " +
+            MySqlConnection connection = new MySqlConnection($"server = {server}; user = {user}; database = {database}; password = {pass}");
+            connection.Open();
+
+
+            string sql = "INSERT INTO `organizerdata`.`tasks` " +
                 "(`name`, `start`, `stop`, `status_id`, `criticality_id`, `user_id`, `category_id`, `smallDescription`, `largeDescription`) " +
                 $"VALUES ('{st.Name}', '{st.Start.ToString(fd)}', '{st.Stop.ToString(fd)}', '1', '1', '1', '1', '1', '1')");
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+
+            connection.Close();
         }
 
         public void ShowMultiTask()
