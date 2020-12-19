@@ -14,8 +14,13 @@ namespace ConsoleOrganizer
         {
             Console.SetWindowSize(150, 40);
 
+            SingleTask st = new SingleTask("nameTask", DateTime.Now, DateTime.Now.AddDays(3), "In Progress", "low", "gnome", "sdesc14", "null");
+
             MultiTask my = new MultiTask();
-            my.GetTasks(MultiTask.FormMySqlQuery(SortFields.stop, true));
+            my.Remove(9);
+            my.Create(st);
+
+            my.Get();
             my.ShowMultiTask();
 
             Console.ReadKey();

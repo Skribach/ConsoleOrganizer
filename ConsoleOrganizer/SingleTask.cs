@@ -8,7 +8,7 @@ namespace ConsoleOrganizer
 {
 	public class SingleTask
 	{
-		private int id;
+		public int id { get; }
 		public string Name { get; }
 		public DateTime Start { get; }
 		public DateTime Stop { get; }
@@ -18,7 +18,18 @@ namespace ConsoleOrganizer
 		public string SmallDesc { get; }
 		public string LargeDesc { get; }
 
-		public SingleTask(int id, string name, DateTime start, DateTime stop, string status, string criticality, string category, string sdesc, string ldesc)
+		public SingleTask(string name, DateTime start, DateTime stop, string status, string criticality, string category, string sdesc, string ldesc)
+		{
+			Name = name;
+			Start = start;
+			Stop = stop;
+			Status = status;
+			Criticality = criticality;
+			Category = category;
+			SmallDesc = sdesc;
+			LargeDesc = ldesc;
+		}
+		public SingleTask(int id, string name, DateTime start, DateTime stop, string status, string criticality, string category, string sdesc, string ldesc) : base()
 		{
 			this.id = id;
 			Name = name;
@@ -30,6 +41,7 @@ namespace ConsoleOrganizer
 			SmallDesc = sdesc;
 			LargeDesc = ldesc;
 		}
+		
 
 		public void ShowRow()
         {

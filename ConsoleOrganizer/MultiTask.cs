@@ -9,7 +9,7 @@ using MySql.Data.MySqlClient;
 
 
 namespace ConsoleOrganizer
-{    
+{
     public enum SearchFields
     {
         id, name, start, stop, status, criticality, category
@@ -26,40 +26,23 @@ namespace ConsoleOrganizer
         private static string database = "organizerdata";
         private static string pass = "1234";
 
-        public List<SingleTask> tasks;  
-        public int Count { get; set; }        
+        private static string fd = "yyyy-MM-dd HH:mm:ss";   //Format date to MySQL server
 
-        public void GetTasks(string sql)
-        {            
-            tasks = new List<SingleTask>();
-            Count = 0;
-            MySqlConnection connection = new MySqlConnection($"server = {server}; user = {user}; database = {database}; password = {pass}");
-            connection.Open();
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader r = command.ExecuteReader();
-            while (r.Read())
-            {
-                tasks.Add(new SingleTask((int)r[0], r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), r[4].ToString(), r[5].ToString(), r[6].ToString(), r[7].ToString(), r[8].ToString()));
-                Count++;
-            }
-            r.Close();
-            connection.Close();
-        }
+        public List<SingleTask> tasks;
+        public int Count { get; set; }
 
-        public static string FormMySqlQuery()
+
+        private string MySql_select = "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticality.name, categories.name, smallDescription, largeDescription " +
+         $"FROM {database}.tasks " +
+         "INNER JOIN criticality ON tasks.criticality_id = criticality.id " +
+         "INNER JOIN categories ON tasks.category_id = categories.id " +
+         "INNER JOIN statuses ON tasks.status_id = statuses.id ";
+        //Secondary methods to generate SQL query
+        private string ToSearch(SearchFields searchBy, string searchVal)
         {
-            return "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticality.name, categories.name, smallDescription, largeDescription " +
-                $"FROM {database}.tasks " +
-                "INNER JOIN criticality ON tasks.criticality_id = criticality.id " +
-                "INNER JOIN categories ON tasks.category_id = categories.id " +
-                "INNER JOIN statuses ON tasks.status_id = statuses.id ";
-        }
-
-        public static string FormMySqlQuery(SearchFields searchBy, string searchVal)
-        {
-            string res = FormMySqlQuery() + "WHERE ";
+            string res = "WHERE ";
             switch (searchBy)
-            {               
+            {
                 case SearchFields.id:
                     res += $"tasks.id = {searchVal} ";
                     break;
@@ -84,12 +67,11 @@ namespace ConsoleOrganizer
             }
             return res;
         }
-
-        public static string FormMySqlQuery(SortFields sortBy, bool isAscOrder)
+        private string ToSort(SortFields sortBy, bool isAscOrder)
         {
-            string res = FormMySqlQuery() + "ORDER BY ";
+            string res = "ORDER BY ";
             switch (sortBy)
-            {   
+            {
                 case SortFields.id:
                     res += $"tasks.id ";
                     break;
@@ -117,37 +99,72 @@ namespace ConsoleOrganizer
             return res;
         }
 
-        public static string FormMySqlQuery(SearchFields searchBy, string searchVal, SortFields sortBy, bool isDecsOrder)
+        //Method for copy Rows from database by sql query
+        private void UpdateTasks(string sql)
         {
-            string res = FormMySqlQuery(searchBy, searchVal) + "ORDER BY ";
-            switch (sortBy)
+            MySqlConnection connection = new MySqlConnection($"server = {server}; user = {user}; database = {database}; password = {pass}");
+            tasks = new List<SingleTask>();
+            Count = 0;
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader r = command.ExecuteReader();
+            while (r.Read())
             {
-                case SortFields.id:
-                    res += $"tasks.id ";
-                    break;
-                case SortFields.name:
-                    res += $"tasks.name ";
-                    break;
-                case SortFields.start:
-                    res += $"tasks.startDateTime ";
-                    break;
-                case SortFields.stop:
-                    res += $"tasks.stopDateTime ";
-                    break;
-                case SortFields.status:
-                    res += $"statuses.name ";
-                    break;
-                case SortFields.criticality:
-                    res += $"criticality.name ";
-                    break;
-                case SortFields.category:
-                    res += $"categories.name ";
-                    break;
+                tasks.Add(new SingleTask((int)r[0], r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), r[4].ToString(), r[5].ToString(), r[6].ToString(), r[7].ToString(), r[8].ToString()));
+                Count++;
             }
-            if (isDecsOrder)
-                res += "DESC ";
-            return res;
-        } 
+            r.Close();
+            connection.Close();
+        }
+
+        //Method for copy Rows from database to tasks with search, sort
+        public void Get()
+        {
+            UpdateTasks(MySql_select);
+        }
+        public void Get(SearchFields searchBy, string searchVal)
+        {
+            UpdateTasks(MySql_select + ToSearch(searchBy, searchVal));
+        }
+        public void Get(SortFields sortBy, bool isAscOrder)
+        {
+            UpdateTasks(MySql_select + ToSort(sortBy, isAscOrder));
+        }
+        public void Get(SearchFields searchBy, string searchVal, SortFields sortBy, bool isAscOrder)
+        {
+            UpdateTasks(MySql_select + ToSearch(searchBy, searchVal) + ToSort(sortBy, isAscOrder));
+        }
+
+        //Method for operations like INSERT, DELETE, UPDATE
+        private void MySqlQuery1(string sql)
+        {
+            MySqlConnection connection = new MySqlConnection($"server = {server}; user = {user}; database = {database}; password = {pass}");
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+        //Method for operations like SELECT with 1 result
+        private string MySqlQuery2(string sql)
+        {
+            MySqlConnection connection = new MySqlConnection($"server = {server}; user = {user}; database = {database}; password = {pass}");
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            string ans = command.ExecuteScalar().ToString();
+            connection.Close();
+            return ans;
+        }
+
+        public void Remove(int id)
+        {
+            MySqlQuery1($"DELETE FROM tasks WHERE id = '{id}'");
+        }
+        public void Create(SingleTask st)
+        {
+            MySqlQuery1("INSERT INTO `organizerdata`.`tasks` " +
+                "(`name`, `start`, `stop`, `status_id`, `criticality_id`, `user_id`, `category_id`, `smallDescription`, `largeDescription`) " +
+                $"VALUES ('{st.Name}', '{st.Start.ToString(fd)}', '{st.Stop.ToString(fd)}', '1', '1', '1', '1', '1', '1')");
+        }
 
         public void ShowMultiTask()
         {
@@ -157,9 +174,12 @@ namespace ConsoleOrganizer
         }
     }
 
+    //INSERT INTO `organizerdata`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `user_id`, `category_id`, `smallDescription`, `largeDescription`) VALUES ('123', '2020-12-18 22:42:15', '2020-12-18 22:42:15', '1', '1', '1', '1', '1', '1');
 
 
 
-    
+
+
+
 
 }
