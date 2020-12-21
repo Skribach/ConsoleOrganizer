@@ -21,12 +21,12 @@ namespace ConsoleOrganizer
 
     public class MultiTask
     {
-        private static string server = "localhost";
-        private static string user = "root";
-        private static string database = "organizerdata";
-        private static string pass = "1234";
 
-        private static string fd = "yyyy-MM-dd HH:mm:ss";   //Format date to MySQL server
+        private string server = "localhost";
+        private string user = "root";
+        private string database = "organizerdata";
+        private string pass = "1234";
+
 
         public List<SingleTask> tasks;
         public int Count { get; set; }
@@ -181,13 +181,6 @@ namespace ConsoleOrganizer
                 t.ShowRow();
         }
     }
-
     //INSERT INTO `organizerdata`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `user_id`, `category_id`, `smallDescription`, `largeDescription`) VALUES ('123', '2020-12-18 22:42:15', '2020-12-18 22:42:15', '1', '1', '1', '1', '1', '1');
-
-
-
-
-
-
 
 }

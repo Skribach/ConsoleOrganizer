@@ -14,14 +14,15 @@ namespace ConsoleOrganizer
         {
             Console.SetWindowSize(150, 40);
 
-            SingleTask st = new SingleTask("nameTask", DateTime.Now, DateTime.Now.AddDays(3), "In Progress", "low", "gnome", "sdesc14", "null");
+            List<GroupBy> groups = new List<GroupBy>();
+            groups.Add(new GroupBy("None", '1'));
+            groups.Add(new GroupBy("Statuses", '2'));
+            groups.Add(new GroupBy("Criticalities", '3'));
+            groups.Add(new GroupBy("Categories", '4'));
+            
+            View v = new View();
 
-            MultiTask my = new MultiTask();
-            my.Remove(9);
-            my.Create(st);
-
-            my.Get();
-            my.ShowMultiTask();
+            v.SelectGroup(groups);
 
             Console.ReadKey();
         }
