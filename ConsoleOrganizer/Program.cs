@@ -14,15 +14,16 @@ namespace ConsoleOrganizer
         {
             Console.SetWindowSize(150, 40);
 
-            View v = new View();    
+            List<GroupBy> groups = new List<GroupBy>();
+            groups.Add(new GroupBy("None", '1'));
+            groups.Add(new GroupBy("Statuses", '2'));
+            groups.Add(new GroupBy("Criticalities", '3'));
+            groups.Add(new GroupBy("Categories", '4'));
+            
+            View v = new View();
 
-            if (v.IsNeedGroup())
-                v.SelectGroup(new List<Group>() { new Group("Status", "statuses", '1'), new Group("Category", "categories", '2'), new Group("Criticality", "criticalities", '3') });
-            v.SelectSort(Sort.GetSorts());
+            v.SelectGroup(groups);
 
-
-            Console.WriteLine();
-            Console.WriteLine(v.sql);
             Console.ReadKey();
         }
     }
