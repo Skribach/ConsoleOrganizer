@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ConsoleOrganizer
 {
@@ -7,136 +10,104 @@ namespace ConsoleOrganizer
     {
         public static string database = "organizerdata";
 
-        private string sql = "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticalities.name, categories.name, smallDescription, largeDescription " +
+           
+
+        public string sql = "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticalities.name, categories.name, smallDescription " +
          $"FROM {database}.tasks " +
          "INNER JOIN criticalities ON tasks.criticality_id = criticalities.id " +
          "INNER JOIN categories ON tasks.category_id = categories.id " +
          "INNER JOIN statuses ON tasks.status_id = statuses.id ";
 
-        public void SelectGroup(List<GroupBy> groups)
+        //public List<Group> groups = new List<Group>() { new Group("Status", "statuses", '1'), new Group("Category", "categories", '2'), new Group("Criticality", "criticalities", '3') };
+
+        public bool IsNeedGroup()
+        {
+            Console.WriteLine("SELECT TASKS YOU WANT SEE:");
+            Console.WriteLine("1. View All;");
+            Console.WriteLine("2. View by Group;");
+
+            char sym;
+            do
+            {
+                sym = Console.ReadKey().KeyChar;
+                if (sym == '1')
+                    return false;
+                if (sym == '2')
+                    return true;
+            }
+            while (true);
+        }
+
+        public void SelectGroup(List<Group> groups)
         {
             Console.Clear();
-            //Showing group values
-            Console.WriteLine("GROUP BY: ");
-            foreach (GroupBy group in groups)
-            {
-                Console.WriteLine($"{group.Key}. {group.Name};");
-            }
+            Console.WriteLine("SELECT GROUP YOU WANT TO SEE:");
+            foreach (Group group in groups)
+                Console.WriteLine($"{group.Key}. {group.Name}");
 
             //Reading from console
-            bool isWriteSucc = false;
             do
             {
                 char k = Console.ReadKey().KeyChar;
-                foreach (GroupBy group in groups)
+                foreach (Group group in groups)
                 {
                     if (group.Key == k)
                     {
-                        if (group.Name == "None")
-                        {
-                            SelectSort();
-                        }
-                        else
-                        {
-                            sql += group.Where;
-                            SelectGroupVal(group);
-                        }
-                        isWriteSucc = true;
+                        sql += $"WHERE {group.TableName}.id = ";
+                        SelectGroupVal(group);
+                        return;
                     }
                 }
             }
-            while (!isWriteSucc);
+            while (true);
         }
 
-        public void SelectGroupVal(GroupBy group)
+        private void SelectGroupVal(Group group)
         {
             Console.Clear();
-            Console.WriteLine("SELECT GROUP VALUE");
-
-            List<GroupByValues> values = group.GetValues();
-            foreach (GroupByValues val in values)
-            {
-                Console.WriteLine($"{val.Key}. {val.Name};");
-            }
+            Console.WriteLine("SELECT GROUPNAME YOU WANT TO SEE:");
+            List<Item> items = group.GetItems();
+            foreach (Item item in items)
+                Console.WriteLine($"{item.Key}. {item.Name}");
 
             //Reading from console
-            bool isWriteSucc = false;
             do
             {
                 char k = Console.ReadKey().KeyChar;
-                foreach (GroupByValues val in values)
+                foreach (Item item in items)
                 {
-                    if (val.Key == k)
+                    if (item.Key == k)
                     {
-                        sql += $"'{val.Name}' ";
-                        SelectSort();
-                        isWriteSucc = true;
+                        sql += $"'{item.Id}' ";
+                        return;
                     }
                 }
             }
-            while (!isWriteSucc);
+            while (true);
         }
 
-        public void SelectSort()
+        public void SelectSort(List<Sort> sorts)
         {
-            //Console write info
             Console.Clear();
-            Console.WriteLine("SELECT SORT TYPE:");
-            List<SortValues> sorts = SortValues.GetSortVal();
-            foreach (SortValues s in sorts)
-                Console.WriteLine($"{s.Key}. {s.Name}");
+            Console.WriteLine("SELECT SORT YOU WANT APPLY");
 
-            //Console read info
-            bool isWriteSucc = false;
+            foreach (Sort sort in sorts)
+                Console.WriteLine($"{sort.Key}. {sort.Name}");
+
+            //Reading from console
             do
             {
                 char k = Console.ReadKey().KeyChar;
-                foreach (SortValues s in sorts)
+                foreach (Sort sort in sorts)
                 {
-                    if (s.Key == k)
+                    if (sort.Key == k)
                     {
-                        sql += $"ORDER BY '{s.Name}' ";
-                        SelectSortOrder();
-                        isWriteSucc = true;
+                        sql += $"ORDER BY {sort.ColumnName} ";
+                        return;
                     }
                 }
             }
-            while (!isWriteSucc);
-        }
-
-        public void SelectSortOrder()
-        {
-            //Console write info
-            Console.Clear();
-            Console.WriteLine("SELECT SORT Order:");
-            Console.WriteLine("1.ASC");
-            Console.WriteLine("2.DESC");
-
-            //Console read indo
-            bool isWriteSucc = false;
-            do
-            {
-                char k = Console.ReadKey().KeyChar;
-                if (k == '1')
-                {
-                    sql += $"ASC ";
-                    ShowTasks(sql);
-                    isWriteSucc = true;
-                }
-                else if (k == '2')
-                {
-                    sql += $"DESC ";
-                    ShowTasks(sql);
-                    isWriteSucc = true;
-                }
-            }
-            while (!isWriteSucc);
-            Console.ReadKey();
-        }
-
-        public void ShowTasks(string sql)
-        {
-            Console.WriteLine(sql);
+            while (true);
         }
     }
 }
