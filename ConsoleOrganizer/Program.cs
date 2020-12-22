@@ -14,15 +14,8 @@ namespace ConsoleOrganizer
         {
             Console.SetWindowSize(150, 40);
 
-            List<GroupBy> groups = new List<GroupBy>();
-            groups.Add(new GroupBy("None", '1'));
-            groups.Add(new GroupBy("Statuses", '2'));
-            groups.Add(new GroupBy("Criticalities", '3'));
-            groups.Add(new GroupBy("Categories", '4'));
-            
-            View v = new View();
-
-            v.SelectGroup(groups);
+            Show sh = new Show();
+            sh.MakeChoise("HELLO WORLD!", new Items("name", "tablename"));
 
             Console.ReadKey();
         }
