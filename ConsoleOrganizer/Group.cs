@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace ConsoleOrganizer
 {
@@ -16,10 +17,38 @@ namespace ConsoleOrganizer
             Name = name;
             TableName = tableName;
         }
-        
-        public List<Item> GetItems()   //TODO -> MySQL request to return all items from group
+
+        public List<Item> GetItems()
         {
-            return new List<Item>() { new Item(1, "Complited"), new Item(2, "Failed"), new Item(3, "In progress") };
+            string sql = $"SELECT id, name FROM organizerdata.{TableName};";
+            List<Item> items = new List<Item>();
+
+            MySqlConnection connection = new MySqlConnection("server = localhost; user = root; database = organizerdata; password = 1234");            
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader r = command.ExecuteReader();
+            while (r.Read())
+                items.Add(new Item((int)r[0], r[1].ToString()));
+            r.Close();
+            connection.Close();
+
+            return items;
+        }
+
+        public List<Order> GetOrders()
+        {
+            string sql = $"SELECT id, value, name FROM organizerdata.orders";
+            List<Order> orders = new List<Order>();
+            MySqlConnection connection = new MySqlConnection("server = localhost; user = root; database = organizerdata; password = 1234");
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(sql, connection);
+            MySqlDataReader r = command.ExecuteReader();
+            while (r.Read())
+                orders.Add(new Order((int)r[0], r[1].ToString(), r[2].ToString()));
+            r.Close();
+            connection.Close();
+
+            return orders;
         }
     }
 

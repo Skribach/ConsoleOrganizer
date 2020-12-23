@@ -9,7 +9,7 @@ namespace ConsoleOrganizer
     class View
     {
         public static string database = "organizerData";
-        public string sql = "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticalities.name, categories.name, smallDescription " +
+        public string sql = "SELECT tasks.id, tasks.name, start, stop, statuses.name, criticalities.name, categories.name, description " +
          $"FROM {database}.tasks " +
          "INNER JOIN criticalities ON tasks.criticality_id = criticalities.id " +
          "INNER JOIN categories ON tasks.category_id = categories.id " +
@@ -17,17 +17,17 @@ namespace ConsoleOrganizer
 
         public void GroupBy(List<Group> groups)
         {
-            Console.Clear();
-            Console.WriteLine("SELECT GROUP YOU WANT TO SEE");
+            Console.Clear();            
+            Console.WriteLine("\nSELECT GROUP YOU WANT TO SEE\n");
             int i = 1;
             foreach (Group gr in groups)
-                Console.WriteLine($"{i++}. {gr.Name}");
-            Console.WriteLine($"{i}. None");
+                Console.WriteLine($"\t{i++}. {gr.Name}");
+            Console.WriteLine($"\t{i}. None");
 
             int j;
             while (true)
             {
-                j = int.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out j);
                 if ((0 < j) && (j < i))
                 {
                     sql += $"WHERE {groups[j - 1].TableName}.name = ";
@@ -35,9 +35,9 @@ namespace ConsoleOrganizer
                     return;
                 }
                 else if (j == i)
-                {
                     return;
-                }
+                else
+                    Console.WriteLine("Invalid choise. Please select again");
             }
         }
         public void SelectGroupVal(Group gr)
@@ -48,48 +48,45 @@ namespace ConsoleOrganizer
             List<Item> items = gr.GetItems();
             foreach (Item item in items)
                 Console.WriteLine($"{i++}. {item.Value}");
-            Console.WriteLine($"{i}. Back");
 
             int j;
             while (true)
             {
-                j = int.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out j);
                 if ((0 < j) && (j < i))
                 {
                     sql += $"'{items[j - 1].Value}' ";
                     return;
                 }
-                else if (j == i)
-                {
-                    return;
-                }
+                else
+                    Console.WriteLine("Invalid choise. Please select again");
             }
         }
 
-        public void SortBy(Group sort)
+        public void SortBy(Group ord)
         {
             Console.Clear();
             Console.WriteLine("SELECT SORT");
             int i = 1;
-            List<Item> items = sort.GetItems();
-            foreach (Item item in items)
-                Console.WriteLine($"{i++}. {item.Value}");
+            List<Order> orders = ord.GetOrders();
+            foreach (Order o in orders)
+                Console.WriteLine($"{i++}. {o.Name}");
             Console.WriteLine($"{i}. None");
 
             int j;
             while (true)
             {
-                j = int.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out j);
                 if ((0 < j) && (j < i))
                 {
-                    sql += $"ORDER BY '{items[j - 1].Value}' ";
+                    sql += $"ORDER BY '{orders[j - 1].Value}' ";
                     SelectSortDirect();
                     return;
                 }
                 else if (j == i)
-                {
                     return;
-                }
+                else
+                    Console.WriteLine("Invalid choise. Please select again");
             }
         }
         public void SelectSortDirect()
@@ -102,20 +99,20 @@ namespace ConsoleOrganizer
             int j;
             while (true)
             {
-                j = int.Parse(Console.ReadLine());
+                int.TryParse(Console.ReadLine(), out j);
                 if (j == 1)
                 {
-                    sql += "ASC;";
+                    sql += "ASC ";
                     return;
                 }
                 else if (j == 2)
                 {
-                    sql += "DESC;";
+                    sql += "DESC ";
                     return;
                 }
-
+                else
+                    Console.WriteLine("Invalid choise. Please select again");
             }
         }
-
     }
 }

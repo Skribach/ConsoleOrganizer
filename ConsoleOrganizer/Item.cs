@@ -8,7 +8,7 @@ namespace ConsoleOrganizer
 {
     class Item
     {
-        public int Id { get; private set; }
+        public int Id { get;  private set; }
         public string Value { get; private set; }
 
         public Item(int id, string value)
@@ -16,7 +16,5 @@ namespace ConsoleOrganizer
             Id = id;
             Value = value;
         }
-
-
     }
 }
