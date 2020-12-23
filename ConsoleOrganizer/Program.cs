@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MySql.Data.MySqlClient;
 
 namespace ConsoleOrganizer
 {
@@ -13,9 +12,20 @@ namespace ConsoleOrganizer
         static void Main(string[] args)
         {
             Console.SetWindowSize(150, 40);
+            List<Group> groups = new List<Group>()
+            {
+                new Group("Status", "statuses"),
+                new Group("Category", "categories"),
+                new Group("Criticality", "criticalities")
+            };
+            Group sort = new Group("Sort", "sort");
 
-            Show sh = new Show();
-            sh.MakeChoise("HELLO WORLD!", new Items("name", "tablename"));
+            View v = new View();
+
+            v.GroupBy(groups);
+            v.SortBy(sort);
+            Console.WriteLine(v.sql);
+
 
             Console.ReadKey();
         }

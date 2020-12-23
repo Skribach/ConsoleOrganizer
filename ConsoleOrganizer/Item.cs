@@ -6,21 +6,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleOrganizer
 {
-    class Cell
+    class Item
     {
         public int Id { get; private set; }
         public string Value { get; private set; }
 
-        public Cell(int id, string value)
+        public Item(int id, string value)
         {
             Id = id;
             Value = value;
         }
 
-        public void UpdateItem()
-        {
-            Id = 0;
-            Value = "UpdatedValue";
-        }
+
     }
 }
