@@ -56,6 +56,7 @@ namespace ConsoleOrganizer
 
         public void ShowMultiTask()
         {
+            Console.Clear();
             Stask.ShowTitle("To Do");
             foreach (Stask t in tasks)
                 t.ShowRow();

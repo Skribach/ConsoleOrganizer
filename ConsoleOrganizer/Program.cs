@@ -25,14 +25,9 @@ namespace ConsoleOrganizer
             Group sort = new Group("Sort", "sort");
 
             View v = new View();
-
-            v.GroupBy(groups);
-            v.SortBy(sort);
-            Console.WriteLine(v.sql);
-
             MTask mt = new MTask(connection);
-            mt.GetTasks(v.sql);
-            Console.SetWindowSize(150, 40);
+            mt.GetTasks(v.FormSqlQuery(groups, sort));
+
             mt.ShowMultiTask();
 
             Console.ReadKey();

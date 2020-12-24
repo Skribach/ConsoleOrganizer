@@ -18,7 +18,7 @@ namespace ConsoleOrganizer
         public void GroupBy(List<Group> groups)
         {
             Console.Clear();            
-            Console.WriteLine("\nSELECT GROUP YOU WANT TO SEE\n");
+            Console.WriteLine($"\n\tSELECT GROUP YOU WANT TO SEE:\n");
             int i = 1;
             foreach (Group gr in groups)
                 Console.WriteLine($"\t{i++}. {gr.Name}");
@@ -43,11 +43,11 @@ namespace ConsoleOrganizer
         public void SelectGroupVal(Group gr)
         {
             Console.Clear();
-            Console.WriteLine("SELECT GROUP NAME YOU WANT TO SEE");
+            Console.WriteLine("\n\tSELECT GROUP NAME YOU WANT TO SEE\n");
             int i = 1;
             List<Item> items = gr.GetItems();
             foreach (Item item in items)
-                Console.WriteLine($"{i++}. {item.Value}");
+                Console.WriteLine($"\t{i++}. {item.Value}");
 
             int j;
             while (true)
@@ -66,12 +66,12 @@ namespace ConsoleOrganizer
         public void SortBy(Group ord)
         {
             Console.Clear();
-            Console.WriteLine("SELECT SORT");
+            Console.WriteLine("\n\tSELECT SORT\n");
             int i = 1;
             List<Order> orders = ord.GetOrders();
             foreach (Order o in orders)
-                Console.WriteLine($"{i++}. {o.Name}");
-            Console.WriteLine($"{i}. None");
+                Console.WriteLine($"\t{i++}. {o.Name}");
+            Console.WriteLine($"\t{i}. None");
 
             int j;
             while (true)
@@ -79,7 +79,7 @@ namespace ConsoleOrganizer
                 int.TryParse(Console.ReadLine(), out j);
                 if ((0 < j) && (j < i))
                 {
-                    sql += $"ORDER BY '{orders[j - 1].Value}' ";
+                    sql += $"\n\tORDER BY '{orders[j - 1].Value}' ";
                     SelectSortDirect();
                     return;
                 }
@@ -92,9 +92,9 @@ namespace ConsoleOrganizer
         public void SelectSortDirect()
         {
             Console.Clear();
-            Console.WriteLine("SELECT SORT");
-            Console.WriteLine($"1. ASC");
-            Console.WriteLine($"2. DESC");
+            Console.WriteLine("\n\tSELECT SORT\n");
+            Console.WriteLine($"\t1. ASC");
+            Console.WriteLine($"\t2. DESC");
 
             int j;
             while (true)
@@ -113,6 +113,13 @@ namespace ConsoleOrganizer
                 else
                     Console.WriteLine("Invalid choise. Please select again");
             }
+        }
+
+        public string FormSqlQuery(List<Group> groups, Group sort)
+        {
+            this.GroupBy(groups);
+            this.SortBy(sort);
+            return sql;
         }
     }
 }
