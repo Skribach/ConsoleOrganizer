@@ -18,7 +18,7 @@ namespace ConsoleOrganizer
         public void GroupBy(List<Group> groups)
         {
             Console.Clear();            
-            Console.WriteLine($"\n\tSELECT GROUP YOU WANT TO SEE:\n");
+            Console.WriteLine($"\n\tSELECT GROUP YOU WANT TO SEE\n");
             int i = 1;
             foreach (Group gr in groups)
                 Console.WriteLine($"\t{i++}. {gr.Name}");

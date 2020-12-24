@@ -20,7 +20,8 @@ namespace ConsoleOrganizer
             {
                 new Group("Status", "statuses"),
                 new Group("Category", "categories"),
-                new Group("Criticality", "criticalities")
+                new Group("Criticality", "criticalities"),
+                new Group("Task", "tasks")
             };
             Group sort = new Group("Sort", "sort");
 
