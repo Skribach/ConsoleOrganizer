@@ -6,31 +6,18 @@ using System.Threading.Tasks;
 
 namespace ConsoleOrganizer
 {
-	public class Stask
+	public class STask : Item
 	{
-		public int Id { get; }
-		public string Name { get; }
 		public DateTime Start { get; }
 		public DateTime Stop { get; }
-		public string StatusId { get; }
-		public string CriticalityId { get; }
-		public string CategoryId { get; }
+		public int StatusId { get; }
+		public int CriticalityId { get; }
+		public int CategoryId { get; }
 		public string Desc { get; }
 
-		public Stask(string name, DateTime start, DateTime stop, string status, string criticality, string category, string sdesc)
-		{
-			Name = name;
-			Start = start;
-			Stop = stop;
-			StatusId = status;
-			CriticalityId = criticality;
-			CategoryId = category;
-			Desc = sdesc;
-		}
-		public Stask(int id, string name, DateTime start, DateTime stop, string status, string criticality, string category, string sdesc) : base()
-		{
-			Id = id;
-			Name = name;
+		
+		public STask(int id, string name, DateTime start, DateTime stop, int status, int criticality, int category, string sdesc) : base(id, name)
+		{			
 			Start = start;
 			Stop = stop;
 			StatusId = status;
@@ -39,19 +26,16 @@ namespace ConsoleOrganizer
 			Desc = sdesc;
 		}
 
-		static public void ShowTitle(string name)
+		public STask(string name, DateTime start, DateTime stop, int status, int criticality, int category, string sdesc) : base(0, name)
 		{
-			Console.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------|");
-			Console.WriteLine($"{name,60}{" ",82}|");
-			Console.WriteLine("-----+-----------------+---------------------+---------------------+---------------+------------+------------+--------------------------------|");
-			Console.WriteLine($"{"ID",4} | {"Name",15} | {"Start",19} | {"Stop",19} | {"Status",13} | {"Critical",10} | {"Category",10} | {"SmallDesc",30} |");
-			Console.WriteLine("-----+-----------------+---------------------+---------------------+---------------+------------+------------+--------------------------------|");
+			Start = start;
+			Stop = stop;
+			StatusId = status;
+			CriticalityId = criticality;
+			CategoryId = category;
+			Desc = sdesc;
 		}
 
-		public void ShowRow()
-		{
-			Console.WriteLine($"{Id,4} | {Name,15} | {Start,19} | {Stop,19} | {StatusId,13} | {CriticalityId,10} | {CategoryId,10} | {Desc,30} |");
-			Console.WriteLine("-----+-----------------+---------------------+---------------------+---------------+------------+------------+--------------------------------|");
-		}
+		
 	}
 }

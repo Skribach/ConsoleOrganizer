@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace ConsoleOrganizer
 {
-    class Item
+    public class Item
     {
         public int Id { get;  private set; }
-        public string Value { get; private set; }
+        public string Name { get; private set; }
 
         public Item(int id, string value)
         {
             Id = id;
-            Value = value;
+            Name = value;
         }
     }
 }

@@ -14,24 +14,31 @@ namespace ConsoleOrganizer
         {
             Console.SetWindowSize(150, 40);
 
-            MySqlConnection connection = new MySqlConnection("server = localhost; user = root; database = organizerdata; password = 1234");
-
             List<Group> groups = new List<Group>()
             {
-                new Group("Status", "statuses"),
-                new Group("Category", "categories"),
-                new Group("Criticality", "criticalities"),
-                new Group("Task", "tasks")
+                new Group ("Category", "categories", "category_id"),
+                new Group ("Status", "statuses", "status_id"),
+                new Group ("Criticality", "criticalities", "criticality_id")
             };
-            Group sort = new Group("Sort", "sort");
 
-            View v = new View();
-            MTask mt = new MTask(connection);
-            mt.GetTasks(v.FormSqlQuery(groups, sort));
+            WorkDB db = new WorkDB("localhost", "root", "organizerdata", "1234");
+            Display d = new Display();
 
-            mt.ShowMultiTask();
+            /*db.Remove(new STask(10, "sdf", DateTime.Now, DateTime.Now.AddMinutes(10), 1, 3, 2, "smaaaaldesc"));*/
+            /*STask st = new STask("someTask", DateTime.Now, DateTime.Now.AddMinutes(10), 1, 3, 2, "smaaaaldesc");
+            db.Add(st);*/
+
+            /*db.Add(groups[0], "noncategory");*/
+
+            /* db.Edit(new STask(7, "123", DateTime.Now, DateTime.Now.AddMinutes(10), 1, 3, 2, "smaaaaldesc"), new Field(1, "name", ""), "newName);*/
+
+
+
 
             Console.ReadKey();
+
         }
     }
+
+
 }

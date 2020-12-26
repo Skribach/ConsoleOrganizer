@@ -44,15 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Selects.cs" />
+    <Compile Include="Display.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="MTask.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Group.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="Stask.cs" />
-    <Compile Include="View.cs" />
+    <Compile Include="Field.cs" />
+    <Compile Include="STask.cs" />
+    <Compile Include="Table.cs" />
+    <Compile Include="WorkDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

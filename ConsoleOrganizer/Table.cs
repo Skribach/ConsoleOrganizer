@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace ConsoleOrganizer
 {
-    class Order : Item
+    abstract class Table
     {
         public string Name { get; private set; }
-
-        public Order(int id, string value, string name) : base (id, value)
+        public string TableName { get; private set; }
+        public Table(string name, string tableName)
         {
             Name = name;
+            TableName = tableName;
         }
     }
 }
