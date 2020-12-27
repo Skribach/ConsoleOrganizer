@@ -95,9 +95,9 @@ namespace ConsoleOrganizer
 
         public string Add(Group group, string newName)
         {
-            try { SendQuery($"INSERT INTO `{db}`.`{group.TableName}` ('name') VALUES ('{newName}')"); }
+            try { SendQuery($"INSERT INTO `{db}`.`{group.TableName}` (name) VALUES ('{newName}')"); }
             catch { return "Group adding failed"; }
-            return "Group added successfully";
+            return "Group added successfully\nPress any key to Continue";
         }
         public string Add(STask task)
         {
