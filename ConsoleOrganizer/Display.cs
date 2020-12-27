@@ -9,8 +9,7 @@ namespace ConsoleOrganizer
     class Display 
        
     {
-        public delegate string Check(string s);
-        //private WorkDB db;
+        public delegate string Check(string a);
         private List<Group> grs;
         public Display(List<Group> groups)
         {
@@ -19,17 +18,17 @@ namespace ConsoleOrganizer
 
         public void Title(string name)
         {
-            Console.WriteLine("---------------------------------------------------------------------------------------------------------------------------------------------------|");
-            Console.WriteLine($"{name,60}{" ",87}|");
-            Console.WriteLine("-----+-----------------+---------------------+---------------------+---------------+------------+------------+-------------------------------------|");
-            Console.WriteLine($"{"#",4} | {"Name",15} | {"Start",19} | {"Stop",19} | {"Status",13} | {"Critical",10} | {"Category",10} | {"Description",35} |");
-            Console.WriteLine("-----+-----------------+---------------------+---------------------+---------------+------------+------------+-------------------------------------|");
+            Console.WriteLine("----------------------------------------------------------------------------------------------------------------------------------------------------|");
+            Console.WriteLine($"{name,60}{" ",88}|");
+            Console.WriteLine("-----+------------+---------------------+---------------------+---------------+---------------+---------------+-------------------------------------|");
+            Console.WriteLine($"{"#",4} | {"Name",10} | {"Start",19} | {"Stop",19} | {"Status",13} | {"Critical",13} | {"Category",13} | {"Description",35} |");
+            Console.WriteLine("-----+------------+---------------------+---------------------+---------------+---------------+---------------+-------------------------------------|");
         }
 
         public void STask(STask task, int num)
         {
-            Console.WriteLine($"{num,4} | {task.Name,15} | {task.Start,19} | {task.Stop,19} | {grs[1].GetNameById(task.StatusId),13} | {grs[2].GetNameById(task.CriticalityId),10} | {grs[0].GetNameById(task.CategoryId),10} | {task.Desc,35} |");
-            Console.WriteLine("-----+-----------------+---------------------+---------------------+---------------+------------+------------+-------------------------------------|");
+            Console.WriteLine($"{num,4} | {task.Name,10} | {task.Start,19} | {task.Stop,19} | {grs[1].GetNameById(task.StatusId),13} | {grs[2].GetNameById(task.CriticalityId),13} | {grs[0].GetNameById(task.CategoryId),13} | {task.Desc,35} |");
+            Console.WriteLine("-----+------------+---------------------+---------------------+---------------+---------------+---------------+-------------------------------------|");
         }
 
         public void MTask(List<STask> tasks, string title)
@@ -76,6 +75,7 @@ namespace ConsoleOrganizer
             }
             return enterName;
         }
+        
 
         //Needed to use limited generics.
         public void WriteChoise(List<Group> li, string title)

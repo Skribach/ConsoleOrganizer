@@ -13,7 +13,7 @@ namespace ConsoleOrganizer
         private string db;
         private string user;
         private string pass;
-        public string fd = "yyyy-MM-dd HH:mm:ss";   //Format date to MySQL server
+        public string FD {get; private set;}   //Format date to MySQL server
         private MySqlConnection connection;
 
         public WorkDB(string server, string user, string db, string pass)
@@ -23,6 +23,7 @@ namespace ConsoleOrganizer
             this.db = db;
             this.pass = pass;
             connection = new MySqlConnection($"server = {server}; user = {user}; database = {db}; password = {pass}");
+            FD = "yyyy-MM-dd HH:mm:ss";
         }
 
         public List<Item> GetItems(Group group)
@@ -98,7 +99,7 @@ namespace ConsoleOrganizer
         public void Add(STask task)
         {
             SendQuery($"INSERT INTO `{db}`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `category_id`, `description`) " +
-                $"VALUES ('{task.Name}', '{task.Start.ToString(fd)}', '{task.Stop.ToString(fd)}', '{task.StatusId}', '{task.CriticalityId}', '{task.CategoryId}', '{task.Desc}')");
+                $"VALUES ('{task.Name}', '{task.Start.ToString(FD)}', '{task.Stop.ToString(FD)}', '{task.StatusId}', '{task.CriticalityId}', '{task.CategoryId}', '{task.Desc}')");
         }
 
         public string Remove(Group group, Item item)

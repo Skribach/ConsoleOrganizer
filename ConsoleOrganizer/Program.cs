@@ -59,6 +59,8 @@ namespace ConsoleOrganizer
                         else
                         {
                             me.AddResult(gAdd, me.EnterNewGroupName(gAdd));
+                            foreach (Group gr in groups)                    //Updating groups needed to be in
+                                gr.UpdateItems();
                         }
                         break;
                     case 2:
@@ -70,8 +72,23 @@ namespace ConsoleOrganizer
                         else
                         {
                             me.RemoveResults(gDel, me.SelectGroupName(gDel, "Select group name"));
-                            fields = db.GetFields();
+                            foreach (Group gr in groups)
+                                gr.UpdateItems();
                         }
+                        break;
+                    case 3:
+                        Group gEdit = me.SelectGroup(groups, "Edit");
+                        if(gEdit==null)
+                        {
+                            me.EditResult(me.SelectSTask(),me.SelectFieldTask(fields), me.UpdateFieldTask(me.SelectFieldTask(fields), groups));
+                        }
+                        else
+                        {
+                            me.EditResult(gEdit, me.SelectGroupName(gEdit, "Select group you want rename"), me.EnterNewItemName(gEdit));
+                            foreach (Group gr in groups)
+                                gr.UpdateItems();
+                        }
+
                         break;
                 }
             }

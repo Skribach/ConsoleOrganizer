@@ -114,15 +114,35 @@ namespace ConsoleOrganizer
             return enterName;
         }
 
-        public STask EnterSTaskParams(List<Group> li)
+        public string EnterName(string title)
         {
-            string name = di.EnterValue("Enter name for task:", STask.CheckName);
-            DateTime start = DateTime.Parse(di.EnterValue("Enter start time in format yyyy-MM-dd HH:mm:ss", STask.CheckStart));
-            DateTime stop = DateTime.Parse(di.EnterValue("Enter stop time in format yyyy-MM-dd HH:mm:ss", STask.CheckStart));
+            return di.EnterValue(title, STask.CheckName);
+        }
+        public DateTime EnterDateTime(string title)
+        {
+            return DateTime.Parse(di.EnterValue(title, STask.CheckStart));
+        }
+        public string EnterDesc()
+        {
+            return di.EnterValue("Enter description for task", STask.CheckDesc);
+        }
+        public List<Item> EnterItems(List<Group> li)
+        {
             List<Item> items = new List<Item>();
             foreach (Group gr in li)
                 items.Add(SelectGroupName(gr, $"Select {gr.Name}"));
-            string desc = di.EnterValue("Enter description for task", STask.CheckDesc);
+            return items;
+        }
+        public STask EnterSTaskParams(List<Group> li)
+        {
+            string name = EnterName("Enter name for new task:");
+            DateTime start = EnterDateTime("Enter start time in format yyyy-MM-dd HH:mm:ss");
+            DateTime stop;
+            do
+                stop = EnterDateTime("Enter stop time in format yyyy-MM-dd HH:mm:ss");
+            while (stop <= start);
+            List<Item> items = EnterItems(li);
+            string desc = EnterDesc();
             return new STask(name, start, stop, items[1].Id, items[2].Id, items[0].Id, desc);
         }
 
@@ -172,6 +192,25 @@ namespace ConsoleOrganizer
             di.WriteChoise(fi, "Select field you want change");
             return fi[di.ReadKey(fi.Count)];
         }
+        public string UpdateFieldTask(Field fi, List<Group> groups)
+        {
+            switch (fi.Name)
+            {
+                case "Name":
+                    return EnterName("Update name");
+                case "Start":
+                    return EnterDateTime("Update start time in format yyyy-MM-dd HH:mm:ss").ToString(db.FD);
+                case "Stop":
+                    return EnterDateTime("Update start time in format yyyy-MM-dd HH:mm:ss").ToString(db.FD);
+                case "Status":
+                    return SelectGroupName(groups[1], "Update status:").Name;
+                case "Criticality":
+                    return SelectGroupName(groups[2], "Update status:").Name;
+                case "Category":
+                    return SelectGroupName(groups[0], "Update status:").Name;
+            }
+            return null;
+        }
 
         public void EditResult(STask st, Field fi, string newField)
         {
@@ -185,6 +224,25 @@ namespace ConsoleOrganizer
             Console.Clear();
             db.Edit(gr, it, newIt);
             Console.WriteLine("Edit task complited");
+        }
+
+        public Item EnterNewItemName(Group gr)
+        {
+            Console.Clear();
+            Console.WriteLine($"\nEnter new name:\n");
+            bool isWrong = true;
+            string enterName = "";
+            string err;
+            while (isWrong)
+            {
+                enterName = Console.ReadLine();
+                err = gr.CheckName(enterName);
+                if (err != null)
+                    Console.WriteLine(err);
+                else
+                    isWrong = false;
+            }
+            return new Item(0, enterName);
         }
     }
 }
