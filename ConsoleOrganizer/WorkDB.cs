@@ -65,6 +65,7 @@ namespace ConsoleOrganizer
             MySqlDataReader r = command.ExecuteReader();
             while (r.Read())
             {
+                //tasks.Add(new STask((int)r[0], r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), (int)r[4], (int)r[5], (int)r[6], r[7].ToString()));
                 tasks.Add(new STask((int)r[0], r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), (int)r[4], (int)r[5], (int)r[6], r[7].ToString()));
             }
             r.Close();
