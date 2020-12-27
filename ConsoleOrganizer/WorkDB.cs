@@ -65,8 +65,8 @@ namespace ConsoleOrganizer
             MySqlDataReader r = command.ExecuteReader();
             while (r.Read())
             {
-                //tasks.Add(new STask((int)r[0], r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), (int)r[4], (int)r[5], (int)r[6], r[7].ToString()));
-                tasks.Add(new STask((int)r[0], r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), (int)r[4], (int)r[5], (int)r[6], r[7].ToString()));
+                tasks.Add(new STask(Int32.Parse(r[0].ToString()), r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), Int32.Parse(r[0].ToString()), Int32.Parse(r[0].ToString()), Int32.Parse(r[0].ToString()), r[7].ToString()));
+                //Console.WriteLine(Int32.Parse(r[0].ToString()) + ":   :"+ r[1].ToString() + ":   :" + r[2].ToString() + ":   :" + r[3].ToString()+ ":   :" + r[4].ToString() + ":   :" + r[5].ToString() + ":   :" + r[6].ToString() + ":   :" + r[7].ToString());
             }
             r.Close();
             connection.Close();
@@ -95,7 +95,7 @@ namespace ConsoleOrganizer
 
         public string Add(Group group, string newName)
         {
-            try { SendQuery($"INSERT INTO {db}.{group.TableName} (`name`) VALUES ('{newName}')"); }
+            try { SendQuery($"INSERT INTO `{db}`.`{group.TableName}` ('name') VALUES ('{newName}')"); }
             catch { return "Group adding failed"; }
             return "Group added successfully";
         }

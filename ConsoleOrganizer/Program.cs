@@ -24,9 +24,9 @@ namespace ConsoleOrganizer
             Menus me = new Menus(db, di);
 
             Group workGroup;
-            while(true)
+            while (true)
             {
-                switch(me.MainPage())
+                switch (me.MainPage())
                 {
                     case 0:
                         workGroup = me.SelectGroupedTasksBy(data.groups);
@@ -46,7 +46,7 @@ namespace ConsoleOrganizer
                         break;
                     case 1:
                         workGroup = me.SelectGroup(data.groups, "Add");
-                        if(workGroup == null)
+                        if (workGroup == null)
                         {
                             STask newTask = me.EnterSTaskParams(data.groups);
                             me.Add(newTask);
@@ -59,7 +59,7 @@ namespace ConsoleOrganizer
                         break;
                     case 2:
                         workGroup = me.SelectGroup(data.groups, "Delete");
-                        if(workGroup == null)
+                        if (workGroup == null)
                         {
                             me.Remove(me.SelectSTask());
                         }
@@ -72,10 +72,10 @@ namespace ConsoleOrganizer
                         break;
                     case 3:
                         workGroup = me.SelectGroup(data.groups, "Edit");
-                        if(workGroup==null)
+                        if (workGroup == null)
                         {
                             Field fi = me.SelectFieldTask(data.fields);
-                            me.Edit(me.SelectSTask(),fi, me.UpdateFieldTask(fi, data.groups));
+                            me.Edit(me.SelectSTask(), fi, me.UpdateFieldTask(fi, data.groups));
                         }
                         else
                         {
