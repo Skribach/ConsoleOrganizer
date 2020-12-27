@@ -45,14 +45,14 @@ namespace ConsoleOrganizer
             string TableName = "orders";
             List<Field> resFields = new List<Field>();
             string sql = $"SELECT {TableName}.id, {TableName}.name, {TableName}.value FROM {db}.{TableName}";
-            connection.Open();
+            try { connection.Open(); }
+            catch { }
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
                 resFields.Add(new Field((int)reader[0], reader[1].ToString(), reader[2].ToString()));
             reader.Close();
             connection.Close();
-
             return resFields;
         }
 
@@ -83,40 +83,44 @@ namespace ConsoleOrganizer
             return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks WHERE tasks.{group.ColumnName} = {item.Id} ORDER BY {field.Name} {(isAsc ? "ASC" : "DESC")};");
         }//Return tasks groupped by group and ordered by field
 
-        private string SendQuery(string sql)
+        private void SendQuery(string sql)
         {
             connection.Open();
             MySqlCommand command = new MySqlCommand(sql, connection);
             command.ExecuteNonQuery();
-            return "send succesful or failed, i don't know";
+            connection.Close();
         }
 
-        public string Add(Group group, string newName)
+        public void Add(Group group, string newName)
         {
-            return SendQuery($"INSERT INTO {db}.{group.TableName} (`name`) VALUES ('{newName}')"); ;
+            SendQuery($"INSERT INTO {db}.{group.TableName} (`name`) VALUES ('{newName}')"); ;
         }
-        public string Add(STask task)
-        {            
-            return SendQuery($"INSERT INTO `{db}`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `category_id`, `description`) " +
+        public void Add(STask task)
+        {
+            SendQuery($"INSERT INTO `{db}`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `category_id`, `description`) " +
                 $"VALUES ('{task.Name}', '{task.Start.ToString(fd)}', '{task.Stop.ToString(fd)}', '{task.StatusId}', '{task.CriticalityId}', '{task.CategoryId}', '{task.Desc}')");
         }
 
         public string Remove(Group group, Item item)
         {
-            return SendQuery($"DELETE FROM `{db}`.`{group.TableName}` WHERE id = {item.Id};");
+            try { SendQuery($"DELETE FROM `{db}`.`{group.TableName}` WHERE id = {item.Id};"); }
+            catch { return "Remove failed. It can be if tasks uses this group"; }
+            return "Remove succesfull";
         }
         public string Remove(STask task)
         {
-            return SendQuery($"DELETE FROM `{db}`.`tasks` WHERE id = {task.Id};");
+            try { SendQuery($"DELETE FROM `{db}`.`tasks` WHERE id = {task.Id};"); }
+            catch { return "Remove failed."; }
+            return "Remove succesfull";
         }
 
-        public string Edit(Group group, Item item, Item newItem)
+        public void Edit(Group group, Item item, Item newItem)
         {
-            return SendQuery($"UPDATE `{db}`.`{group.TableName}` SET name = '{newItem.Name}' WHERE id = '{item.Id}'");
+            SendQuery($"UPDATE `{db}`.`{group.TableName}` SET name = '{newItem.Name}' WHERE id = '{item.Id}'");
         }   //Edit group's item by ID
-        public string Edit(STask task, Field field, string newData)
+        public void Edit(STask task, Field field, string newData)
         {
-            return SendQuery($"UPDATE `{db}`.tasks SET {field.Name} = '{newData}' WHERE id = '{task.Id}'");
+            SendQuery($"UPDATE `{db}`.tasks SET {field.Name} = '{newData}' WHERE id = '{task.Id}'");
         }//Edit task by ID
     }
 }

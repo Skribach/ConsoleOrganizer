@@ -21,9 +21,9 @@ namespace ConsoleOrganizer
             List<string> menus = new List<String>()
             {
                 "View Tasks",
-                "Add Task",
-                "Remove Task",
-                "Edit Task"
+                "Add",
+                "Remove",
+                "Edit"
             };
 
             di.WriteChoise(menus, "Task orginizer");
@@ -72,6 +72,7 @@ namespace ConsoleOrganizer
         {
             List<STask> tasks = db.GetSTasks(fi, isAsc);
             di.MTask(tasks, $"Tasks ordered by {fi.Value}");
+            Console.ReadKey();
             return;
         }
 
@@ -79,6 +80,7 @@ namespace ConsoleOrganizer
         {
             List<STask> tasks = db.GetSTasks(gr, it, fi, isAsc);
             di.MTask(tasks, $"Tasks in group {gr.Name} = {it.Name} ordered by {fi.Name}");
+            Console.ReadKey();
             return;
         }
 
@@ -129,6 +131,7 @@ namespace ConsoleOrganizer
             Console.Clear();
             db.Add(gr, newName);
             Console.WriteLine("Group added successfully");
+            Console.ReadKey();
         }
 
         public void AddResult(STask st)
@@ -136,6 +139,7 @@ namespace ConsoleOrganizer
             Console.Clear();
             db.Add(st);
             Console.WriteLine("Task added successfully");
+            Console.ReadKey();
         }
 
         public STask SelectSTask()
@@ -150,8 +154,8 @@ namespace ConsoleOrganizer
         public void RemoveResults(Group gr, Item it)
         {
             Console.Clear();
-            db.Remove(gr, it);
-            Console.WriteLine("Remove group complited");
+            Console.WriteLine(db.Remove(gr, it));
+            Console.ReadKey();
         }
 
         public void RemoveResults(STask st)
@@ -159,6 +163,7 @@ namespace ConsoleOrganizer
             Console.Clear();
             db.Remove(st);
             Console.WriteLine("Remove task complited");
+            Console.ReadKey();
         }
 
         public Field SelectFieldTask(List<Field> fi)

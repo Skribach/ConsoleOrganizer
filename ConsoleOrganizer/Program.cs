@@ -27,18 +27,54 @@ namespace ConsoleOrganizer
             List<Field> fields = db.GetFields();
 
             Display di = new Display(groups);
-            Menus me = new Menu(db, d);
+            Menus me = new Menus(db, di);
 
             while(true)
             {
-                switch()
+                switch(me.MainPage())
+                {
+                    case 0:
+                        Group gView = me.SelectGroupedTasksBy(groups);
+                        if (gView == null)
+                        {
+                            Field fiOrd = me.SelectOrder(fields);
+                            bool isAsc = me.SelectOrderDirection();
+                            me.ViewResult(fiOrd, isAsc);
+                        }
+                        else
+                        {
+                            Item it = me.SelectGroupName(gView, "Select group name:");
+                            Field fiOrd = me.SelectOrder(fields);
+                            bool isAsc = me.SelectOrderDirection();
+                            me.ViewResult(gView, it, fiOrd, isAsc);
+                        }
+                        break;
+                    case 1:
+                        Group gAdd = me.SelectGroup(groups, "Add");
+                        if(gAdd == null)
+                        {
+                            STask newTask = me.EnterSTaskParams(groups);
+                            me.AddResult(newTask);
+                        }
+                        else
+                        {
+                            me.AddResult(gAdd, me.EnterNewGroupName(gAdd));
+                        }
+                        break;
+                    case 2:
+                        Group gDel = me.SelectGroup(groups, "Delete");
+                        if(gDel == null)
+                        {
+                            me.RemoveResults(me.SelectSTask());
+                        }
+                        else
+                        {
+                            me.RemoveResults(gDel, me.SelectGroupName(gDel, "Select group name"));
+                            fields = db.GetFields();
+                        }
+                        break;
+                }
             }
-            
-
-            
-
-            Console.ReadKey();
-
         }
     }
 
