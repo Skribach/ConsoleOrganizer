@@ -42,6 +42,8 @@ namespace ConsoleOrganizer
         {
             if (name.Count() > 13)
                 return "Max. length of group = 13";
+            else if (name.Count() == 0)
+                return "Empty field. Please reEnter";
             Regex regex = new Regex("[0-9a-zA-Z ]");
             MatchCollection matches = regex.Matches(name);
             if (matches.Count != name.Count())

@@ -57,7 +57,7 @@ namespace ConsoleOrganizer
             return resFields;
         }
 
-        private List<STask> GetSTasks(string sql)
+        public List<STask> GetSTasks(string sql)
         {
             List<STask> tasks = new List<STask>();
             connection.Open();
@@ -92,14 +92,24 @@ namespace ConsoleOrganizer
             connection.Close();
         }
 
-        public void Add(Group group, string newName)
+        public string Add(Group group, string newName)
         {
-            SendQuery($"INSERT INTO {db}.{group.TableName} (`name`) VALUES ('{newName}')"); ;
+            try { SendQuery($"INSERT INTO {db}.{group.TableName} (`name`) VALUES ('{newName}')"); }
+            catch { return "Group adding failed"; }
+            return "Group added successfully";
         }
-        public void Add(STask task)
+        public string Add(STask task)
         {
-            SendQuery($"INSERT INTO `{db}`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `category_id`, `description`) " +
-                $"VALUES ('{task.Name}', '{task.Start.ToString(FD)}', '{task.Stop.ToString(FD)}', '{task.StatusId}', '{task.CriticalityId}', '{task.CategoryId}', '{task.Desc}')");
+            try
+            {
+                SendQuery($"INSERT INTO `{db}`.`tasks` (`name`, `start`, `stop`, `status_id`, `criticality_id`, `category_id`, `description`) " +
+              $"VALUES ('{task.Name}', '{task.Start.ToString(FD)}', '{task.Stop.ToString(FD)}', '{task.StatusId}', '{task.CriticalityId}', '{task.CategoryId}', '{task.Desc}')");
+            }
+            catch
+            {
+                return "Task adding failed";
+            }
+            return "Task adding succesfull";
         }
 
         public string Remove(Group group, Item item)

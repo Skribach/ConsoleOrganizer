@@ -44,6 +44,8 @@ namespace ConsoleOrganizer
         {
             if (name.Count() > 10)
                 return "Max. length of name = 10";
+            else if (name.Count() == 0)
+                return "Empty field. Please reEnter";
             Regex regex = new Regex("[0-9a-zA-Z ]");
             MatchCollection matches = regex.Matches(name);
             if (matches.Count != name.Count())
@@ -68,6 +70,8 @@ namespace ConsoleOrganizer
         {
             if (desc.Count() > 35)
                 return "Max. length of description = 35";
+            else if (desc.Count() == 0)
+                return "Empty field. Please reEnter";
             Regex regex = new Regex("[0-9a-zA-Z ]");
             MatchCollection matches = regex.Matches(desc);
             if (matches.Count != desc.Count())

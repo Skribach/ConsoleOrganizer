@@ -148,15 +148,13 @@ namespace ConsoleOrganizer
         public void Add(Group gr, string newName)
         {
             Console.Clear();
-            db.Add(gr, newName);
-            Console.WriteLine("Group added successfully");
+            Console.WriteLine(db.Add(gr, newName));
             Console.ReadKey();
         }
         public void Add(STask st)
         {
             Console.Clear();
-            db.Add(st);
-            Console.WriteLine("Task added successfully");
+            Console.WriteLine(db.Add(st));
             Console.ReadKey();
         }
 
