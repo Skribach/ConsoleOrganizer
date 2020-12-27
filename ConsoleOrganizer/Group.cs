@@ -7,33 +7,40 @@ using MySql.Data.MySqlClient;
 
 namespace ConsoleOrganizer
 {
-    class Group : Table
+    class Group
     {
+        public string Name { get; private set; }
+        public string TableName { get; private set; }
         public string ColumnName { get; private set; }
+        private WorkDB db;
+        public List<Item> items = new List<Item>();
 
-        public Group(string name, string tableName, string columnName) : base(name, tableName)
+        public Group(string name, string tableName, string columnName, WorkDB db )
         {
             ColumnName = columnName;
+            Name = name;
+            TableName = tableName;
+            this.db = db;
+            items = db.GetItems(this);
         }
-        public List<Item> items = new List<Item>();
-        
 
-        /*public List<Item> GetItems()
+        public string GetNameById(int id)
         {
-            string sql = $"SELECT id, name FROM organizerdata.{TableName};";
-            List<Item> items = new List<Item>();
+            for (int i = 0; i < items.Count; i++)
+                if (items[i].Id == id)
+                    return items[i].Name;
+            return "notFound";
+        }
 
-            MySqlConnection connection = new MySqlConnection("server = localhost; user = root; database = organizerdata; password = 1234");            
-            connection.Open();
-            MySqlCommand command = new MySqlCommand(sql, connection);
-            MySqlDataReader r = command.ExecuteReader();
-            while (r.Read())
-                items.Add(new Item((int)r[0], r[1].ToString()));
-            r.Close();
-            connection.Close();
+        public void UpdateItems()
+        {
+            items = db.GetItems(this);
+        }
 
-            return items;
-        }*/
+        public string CheckName(string name)
+        {
+            return null;
+        }
     }
 
 }

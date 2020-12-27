@@ -13,7 +13,7 @@ namespace ConsoleOrganizer
         private string db;
         private string user;
         private string pass;
-        private static string fd = "yyyy-MM-dd HH:mm:ss";   //Format date to MySQL server
+        public string fd = "yyyy-MM-dd HH:mm:ss";   //Format date to MySQL server
         private MySqlConnection connection;
 
         public WorkDB(string server, string user, string db, string pass)
@@ -118,7 +118,5 @@ namespace ConsoleOrganizer
         {
             return SendQuery($"UPDATE `{db}`.tasks SET {field.Name} = '{newData}' WHERE id = '{task.Id}'");
         }//Edit task by ID
-
-
     }
 }
