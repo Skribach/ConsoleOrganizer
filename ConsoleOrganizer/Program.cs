@@ -39,14 +39,14 @@ namespace ConsoleOrganizer
                         {
                             Field fiOrd = me.SelectOrder(fields);
                             bool isAsc = me.SelectOrderDirection();
-                            me.ViewResult(fiOrd, isAsc);
+                            me.View(fiOrd, isAsc);
                         }
                         else
                         {
                             Item it = me.SelectGroupName(gView, "Select group name:");
                             Field fiOrd = me.SelectOrder(fields);
                             bool isAsc = me.SelectOrderDirection();
-                            me.ViewResult(gView, it, fiOrd, isAsc);
+                            me.View(gView, it, fiOrd, isAsc);
                         }
                         break;
                     case 1:
@@ -54,11 +54,11 @@ namespace ConsoleOrganizer
                         if(gAdd == null)
                         {
                             STask newTask = me.EnterSTaskParams(groups);
-                            me.AddResult(newTask);
+                            me.Add(newTask);
                         }
                         else
                         {
-                            me.AddResult(gAdd, me.EnterNewGroupName(gAdd));
+                            me.Add(gAdd, me.EnterNewGroupName(gAdd));
                             foreach (Group gr in groups)                    //Updating groups needed to be in
                                 gr.UpdateItems();
                         }
@@ -67,11 +67,11 @@ namespace ConsoleOrganizer
                         Group gDel = me.SelectGroup(groups, "Delete");
                         if(gDel == null)
                         {
-                            me.RemoveResults(me.SelectSTask());
+                            me.Remove(me.SelectSTask());
                         }
                         else
                         {
-                            me.RemoveResults(gDel, me.SelectGroupName(gDel, "Select group name"));
+                            me.Remove(gDel, me.SelectGroupName(gDel, "Select group name"));
                             foreach (Group gr in groups)
                                 gr.UpdateItems();
                         }
@@ -80,11 +80,12 @@ namespace ConsoleOrganizer
                         Group gEdit = me.SelectGroup(groups, "Edit");
                         if(gEdit==null)
                         {
-                            me.EditResult(me.SelectSTask(),me.SelectFieldTask(fields), me.UpdateFieldTask(me.SelectFieldTask(fields), groups));
+                            Field fi = me.SelectFieldTask(fields);
+                            me.Edit(me.SelectSTask(),fi, me.UpdateFieldTask(fi, groups));
                         }
                         else
                         {
-                            me.EditResult(gEdit, me.SelectGroupName(gEdit, "Select group you want rename"), me.EnterNewItemName(gEdit));
+                            me.Edit(gEdit, me.SelectGroupName(gEdit, "Select group you want rename"), me.EnterNewItemName(gEdit));
                             foreach (Group gr in groups)
                                 gr.UpdateItems();
                         }

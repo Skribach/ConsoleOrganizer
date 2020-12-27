@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ConsoleOrganizer
@@ -41,6 +42,12 @@ namespace ConsoleOrganizer
 
         public static string CheckName(string name)
         {
+            if (name.Count() > 10)
+                return "Max. length of name = 10";
+            Regex regex = new Regex("[0-9a-zA-Z ]");
+            MatchCollection matches = regex.Matches(name);
+            if (matches.Count != name.Count())
+                return "Available symbols are [0-9] or/and [a-z] or/and [A-Z]\nPlease, reEnter";
             return null;
         }
         public static string CheckStart(string start)
@@ -59,8 +66,13 @@ namespace ConsoleOrganizer
         }
         public static string CheckDesc(string desc)
         {
+            if (desc.Count() > 35)
+                return "Max. length of description = 35";
+            Regex regex = new Regex("[0-9a-zA-Z ]");
+            MatchCollection matches = regex.Matches(desc);
+            if (matches.Count != desc.Count())
+                return "Available symbols are [0-9] or/and [a-z] or/and [A-Z]\nPlease, reEnter";
             return null;
         }
-
     }
 }

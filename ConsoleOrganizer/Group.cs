@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
@@ -39,6 +40,12 @@ namespace ConsoleOrganizer
 
         public string CheckName(string name)
         {
+            if (name.Count() > 13)
+                return "Max. length of group = 13";
+            Regex regex = new Regex("[0-9a-zA-Z ]");
+            MatchCollection matches = regex.Matches(name);
+            if (matches.Count != name.Count())
+                return "Available symbols are [0-9] or/and [a-z] or/and [A-Z]\nPlease, reEnter";
             return null;
         }
     }

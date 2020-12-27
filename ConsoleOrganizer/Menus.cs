@@ -68,15 +68,14 @@ namespace ConsoleOrganizer
             return di.ReadKey(2) == 2 ? true : false;
         }
 
-        public void ViewResult(Field fi, bool isAsc)
+        public void View(Field fi, bool isAsc)
         {
             List<STask> tasks = db.GetSTasks(fi, isAsc);
             di.MTask(tasks, $"Tasks ordered by {fi.Value}");
             Console.ReadKey();
             return;
         }
-
-        public void ViewResult(Group gr, Item it, Field fi, bool isAsc)
+        public void View(Group gr, Item it, Field fi, bool isAsc)
         {
             List<STask> tasks = db.GetSTasks(gr, it, fi, isAsc);
             di.MTask(tasks, $"Tasks in group {gr.Name} = {it.Name} ordered by {fi.Name}");
@@ -114,19 +113,19 @@ namespace ConsoleOrganizer
             return enterName;
         }
 
-        public string EnterName(string title)
+        private string EnterName(string title)
         {
             return di.EnterValue(title, STask.CheckName);
         }
-        public DateTime EnterDateTime(string title)
+        private DateTime EnterDateTime(string title)
         {
             return DateTime.Parse(di.EnterValue(title, STask.CheckStart));
         }
-        public string EnterDesc()
+        private string EnterDesc()
         {
             return di.EnterValue("Enter description for task", STask.CheckDesc);
         }
-        public List<Item> EnterItems(List<Group> li)
+        private List<Item> EnterItems(List<Group> li)
         {
             List<Item> items = new List<Item>();
             foreach (Group gr in li)
@@ -146,15 +145,14 @@ namespace ConsoleOrganizer
             return new STask(name, start, stop, items[1].Id, items[2].Id, items[0].Id, desc);
         }
 
-        public void AddResult(Group gr, string newName)
+        public void Add(Group gr, string newName)
         {
             Console.Clear();
             db.Add(gr, newName);
             Console.WriteLine("Group added successfully");
             Console.ReadKey();
         }
-
-        public void AddResult(STask st)
+        public void Add(STask st)
         {
             Console.Clear();
             db.Add(st);
@@ -167,18 +165,16 @@ namespace ConsoleOrganizer
             List<STask> li = db.GetSTasks();
             Console.Clear();
             di.MTask(li, "Select number of task you want to delete");
-            di.ReadKey(li.Count);
             return li[di.ReadKey(li.Count)];
         }
 
-        public void RemoveResults(Group gr, Item it)
+        public void Remove(Group gr, Item it)
         {
             Console.Clear();
             Console.WriteLine(db.Remove(gr, it));
             Console.ReadKey();
         }
-
-        public void RemoveResults(STask st)
+        public void Remove(STask st)
         {
             Console.Clear();
             db.Remove(st);
@@ -192,6 +188,7 @@ namespace ConsoleOrganizer
             di.WriteChoise(fi, "Select field you want change");
             return fi[di.ReadKey(fi.Count)];
         }
+
         public string UpdateFieldTask(Field fi, List<Group> groups)
         {
             switch (fi.Name)
@@ -212,14 +209,13 @@ namespace ConsoleOrganizer
             return null;
         }
 
-        public void EditResult(STask st, Field fi, string newField)
+        public void Edit(STask st, Field fi, string newField)
         {
             Console.Clear();
             db.Edit(st, fi, newField);
             Console.WriteLine("Edit task complited");
         }
-
-        public void EditResult(Group gr, Item it, Item newIt)
+        public void Edit(Group gr, Item it, Item newIt)
         {
             Console.Clear();
             db.Edit(gr, it, newIt);
