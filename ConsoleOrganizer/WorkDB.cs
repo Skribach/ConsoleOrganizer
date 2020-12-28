@@ -30,11 +30,12 @@ namespace ConsoleOrganizer
         {
             List<Item> items = new List<Item>();
             string sql = $"SELECT {group.TableName}.id, {group.TableName}.name FROM {db}.{group.TableName}";
-            connection.Open();
+            try { connection.Open(); }
+            catch { };
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
-                items.Add(new Item((int)reader[0], reader[1].ToString()));
+                items.Add(new Item(Int32.Parse(reader[0].ToString()), reader[1].ToString()));
             reader.Close();
             connection.Close();
 
@@ -65,7 +66,7 @@ namespace ConsoleOrganizer
             MySqlDataReader r = command.ExecuteReader();
             while (r.Read())
             {
-                tasks.Add(new STask(Int32.Parse(r[0].ToString()), r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), Int32.Parse(r[0].ToString()), Int32.Parse(r[0].ToString()), Int32.Parse(r[0].ToString()), r[7].ToString()));
+                tasks.Add(new STask(Int32.Parse(r[0].ToString()), r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), Int32.Parse(r[4].ToString()), Int32.Parse(r[5].ToString()), Int32.Parse(r[6].ToString()), r[7].ToString()));
                 //Console.WriteLine(Int32.Parse(r[0].ToString()) + ":   :"+ r[1].ToString() + ":   :" + r[2].ToString() + ":   :" + r[3].ToString()+ ":   :" + r[4].ToString() + ":   :" + r[5].ToString() + ":   :" + r[6].ToString() + ":   :" + r[7].ToString());
             }
             r.Close();
