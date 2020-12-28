@@ -31,7 +31,7 @@ namespace ConsoleOrganizer
             List<Item> items = new List<Item>();
             string sql = $"SELECT {group.TableName}.id, {group.TableName}.name FROM {db}.{group.TableName}";
             try { connection.Open(); }
-            catch { };
+            catch { return null; }
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -48,7 +48,7 @@ namespace ConsoleOrganizer
             List<Field> resFields = new List<Field>();
             string sql = $"SELECT {TableName}.id, {TableName}.name, {TableName}.value FROM {db}.{TableName}";
             try { connection.Open(); }
-            catch { }
+            catch { return null; }
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -61,7 +61,8 @@ namespace ConsoleOrganizer
         public List<STask> GetSTasks(string sql)
         {
             List<STask> tasks = new List<STask>();
-            connection.Open();
+            try { connection.Open(); }
+            catch { return null; }
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader r = command.ExecuteReader();
             while (r.Read())
@@ -79,11 +80,11 @@ namespace ConsoleOrganizer
         }//Return all tasks        
         public List<STask> GetSTasks(Field field, bool isAsc)
         {
-            return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks ORDER BY {field.Name} {(isAsc ? "ASC" : "DESC")};");
+            return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks ORDER BY {field.Value} {(isAsc ? "ASC" : "DESC")};");
         }//Return all tasks in ordered by field        
         public List<STask> GetSTasks(Group group, Item item, Field field, bool isAsc)
         {
-            return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks WHERE tasks.{group.ColumnName} = {item.Id} ORDER BY {field.Name} {(isAsc ? "ASC" : "DESC")};");
+            return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks WHERE tasks.{group.ColumnName} = {item.Id} ORDER BY {field.Value} {(isAsc ? "ASC" : "DESC")};");
         }//Return tasks groupped by group and ordered by field
 
         private void SendQuery(string sql)
@@ -119,13 +120,13 @@ namespace ConsoleOrganizer
             try { SendQuery($"DELETE FROM `{db}`.`{group.TableName}` WHERE id = {item.Id};"); }
             catch { return "Remove failed. It can be if tasks uses this group"; }
             return "Remove succesfull";
-        }
+        }//Remove group's item by ID
         public string Remove(STask task)
         {
             try { SendQuery($"DELETE FROM `{db}`.`tasks` WHERE id = {task.Id};"); }
             catch { return "Remove failed."; }
             return "Remove succesfull";
-        }
+        }//Remove task by ID
 
         public void Edit(Group group, Item item, Item newItem)
         {
