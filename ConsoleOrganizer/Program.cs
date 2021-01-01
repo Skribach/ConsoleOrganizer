@@ -16,8 +16,8 @@ namespace ConsoleOrganizer
         {
             Console.SetWindowSize(150, 40);
 
-            //WorkDB db = new WorkDB("f0500850.xsph.ru", "f0500850_organizer_user", "f0500850_organizerdata", "1234");
-            WorkDB db = new WorkDB("localhost", "root", "organizerdata", "1234");
+            WorkDB db = new WorkDB("f0500850.xsph.ru", "f0500850_organizer_user", "f0500850_organizerdata", "1234");
+            //WorkDB db = new WorkDB("localhost", "root", "organizerdata", "1234");
 
             Data data = new Data(db);
             Display display = new Display(data.groups);
