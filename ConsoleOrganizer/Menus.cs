@@ -71,7 +71,7 @@ namespace ConsoleOrganizer
         public void View(Field fi, bool isAsc)
         {
             List<STask> tasks = db.GetSTasks(fi, isAsc);
-            di.MTask(tasks, $"Tasks ordered by {fi.Value}");
+            di.MTask(tasks, $"Tasks ordered by {fi.Name}");
             Console.ReadKey();
             return;
         }

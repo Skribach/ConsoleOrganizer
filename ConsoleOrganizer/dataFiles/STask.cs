@@ -38,7 +38,7 @@ namespace ConsoleOrganizer
             Desc = sdesc;
         }
 
-        public STask() : base(0, "") { }
+        //public STask() : base(0, "") { }
 
         public static string CheckName(string name)
         {
