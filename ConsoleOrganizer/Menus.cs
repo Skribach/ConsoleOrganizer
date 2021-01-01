@@ -65,7 +65,7 @@ namespace ConsoleOrganizer
             Console.WriteLine("1. ASC Order");
             Console.WriteLine("2. DESC Order");
 
-            return di.ReadKey(2) == 2 ? true : false;
+            return di.ReadKey(2) == 0 ? true : false;
         }
 
         public void View(Field fi, bool isAsc)

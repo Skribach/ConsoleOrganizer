@@ -66,10 +66,7 @@ namespace ConsoleOrganizer
             MySqlCommand command = new MySqlCommand(sql, connection);
             MySqlDataReader r = command.ExecuteReader();
             while (r.Read())
-            {
                 tasks.Add(new STask(Int32.Parse(r[0].ToString()), r[1].ToString(), DateTime.Parse(r[2].ToString()), DateTime.Parse(r[3].ToString()), Int32.Parse(r[4].ToString()), Int32.Parse(r[5].ToString()), Int32.Parse(r[6].ToString()), r[7].ToString()));
-                //Console.WriteLine(Int32.Parse(r[0].ToString()) + ":   :"+ r[1].ToString() + ":   :" + r[2].ToString() + ":   :" + r[3].ToString()+ ":   :" + r[4].ToString() + ":   :" + r[5].ToString() + ":   :" + r[6].ToString() + ":   :" + r[7].ToString());
-            }
             r.Close();
             connection.Close();
             return tasks;
@@ -80,7 +77,7 @@ namespace ConsoleOrganizer
         }//Return all tasks        
         public List<STask> GetSTasks(Field field, bool isAsc)
         {
-            return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks ORDER BY {field.Value} {(isAsc ? "ASC" : "DESC")};");
+            return GetSTasks($"SELECT id, name, start, stop, status_id, criticality_id, category_id, description FROM {db}.tasks ORDER BY {field.Value} {(isAsc ? "ASC" : "DESC")}");
         }//Return all tasks in ordered by field        
         public List<STask> GetSTasks(Group group, Item item, Field field, bool isAsc)
         {
